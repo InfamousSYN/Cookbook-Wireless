@@ -71,9 +71,7 @@ Vagrant.configure("2") do |config|
     chef.recipe_url = "https://github.com/InfamousSYN/Cookbook-Wireless"
     chef.add_recipe "Cookbook-Wireless"
     chef.json = {
-      "general" => {
-        "chipset" => "8814au"
-      }
+      "chipset" => "8814au"
     }
   end
 end

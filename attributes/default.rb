@@ -4,33 +4,38 @@
 #
 
 ## General Attributes
-default['general']['user'] = 'vagrant'
-default['general']['group'] = 'vagrant'
-default['general']['location'] = '/opt'
-default['general']['ubuntu']['beaver']['sources'] = 'ubuntu_beaver_sources.list'
-default['general']['kali']['keyring']['href'] = 'https://http.kali.org/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2018.1_all.deb'
-default['general']['kali']['keyring']['filename'] = 'kali-archive-keyring_2018.1_all.deb'
-default['general']['applications'] = ['git', 'wireshark']
+default["general"]["user"] = "vagrant"
+default["general"]["group"] = "vagrant"
+default["general"]["directory"] = "/opt"
+default["general"]["ubuntu"]["beaver"]["sources"] = "ubuntu_beaver_sources.list"
+default["general"]["kali"]["keyring"]["location"] = "https://http.kali.org/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2018.1_all.deb"
+default["general"]["kali"]["keyring"]["filename"] = "kali-archive-keyring_2018.1_all.deb"
+default["general"]["applications"] = ["ubuntu-desktop", "git", "wireshark", "python", "python-pip","wireless-tools"]
 
 ## Adaptor Chipset Attributes
-default['chipset'] = '8814au'
-default['chipset']['rtl8814au']['href'] = 'https://github.com/aircrack-ng/rtl8812au/tree/v5.3.4'
-default['chipset']['rtl8812au']['href'] = 'https://github.com/aircrack-ng/rtl8812au/tree/v5.1.5'
-default['chipset']['dependencies'] = ['dkms', 'build-essential', 'bc', 'libelf-dev']
-default['chipset']['location'] = '/rtl8812au'
+default["general"]["chipset"]["driver"] = "8814au"
+default["general"]["chipset"]["location"] = "https://github.com/aircrack-ng/rtl8812au.git"
+case node["general"]["chipset"]["driver"]
+when "8814au"
+	default["general"]["chipset"]["branch"] = "v5.3.4"
+when "8812au"
+	default["general"]["chipset"]["branch"] = "v5.1.5"
+end	
+default["general"]["chipset"]["dependencies"] = ["dkms", "build-essential", "bc", "libelf-dev"]
+default["general"]["chipset"]["directory"] = "/rtl8812au"
 
 
 ## Tool Attributes
-default['tool']['rogue']['enable'] = true
-default['tool']['rogue']['href'] = 'https://github.com/InfamousSYN/rogue'
-default['tool']['rogue']['location'] = '/rogue'
+default["general"]["tool"]["rogue"]["enable"] = true
+default["general"]["tool"]["rogue"]["location"] = "https://github.com/InfamousSYN/rogue.git"
+default["general"]["tool"]["rogue"]["directory"] = "/rogue"
 
-default['tool']['eapeak']['enable'] = false
-default['tool']['eapeak']['href'] = 'https://github.com/securestate/eapeak'
-default['tool']['eapeak']['dependencies'] = []
-default['tool']['eapeak']['location'] = '/eapeak'
+default["general"]["tool"]["eapeak"]["enable"] = false
+default["general"]["tool"]["eapeak"]["location"] = "https://github.com/securestate/eapeak.git"
+default["general"]["tool"]["eapeak"]["dependencies"] = []
+default["general"]["tool"]["eapeak"]["directory"] = "/eapeak"
 
-default['tool']['aircrack']['enable'] = true
-default['tool']['aircrack']['href'] = 'https://github.com/aircrack-ng/aircrack-ng'
-default['tool']['aircrack']['dependencies'] = ['build-essential', 'autoconf', 'automake', 'libtool', 'pkg-config', 'libnl-3-dev', 'libnl-genl-3-dev', 'libssl-dev', 'ethtool', 'shtool', 'rfkill', 'zlib1g-dev', 'libpcap-dev', 'libsqlite3-dev', 'libpcre3-dev', 'libhwloc-dev', 'libcmocka-dev']
-default['tool']['aircrack']['location'] = '/aircrack-ng'
+default["general"]["tool"]["aircrack"]["enable"] = true
+default["general"]["tool"]["aircrack"]["location"] = "https://github.com/aircrack-ng/aircrack-ng.git"
+default["general"]["tool"]["aircrack"]["dependencies"] = ["build-essential", "autoconf", "automake", "libtool", "pkg-config", "libnl-3-dev", "libnl-genl-3-dev", "libssl-dev", "ethtool", "shtool", "rfkill", "zlib1g-dev", "libpcap-dev", "libsqlite3-dev", "libpcre3-dev", "libhwloc-dev", "libcmocka-dev"]
+default["general"]["tool"]["aircrack"]["directory"] = "/aircrack-ng"

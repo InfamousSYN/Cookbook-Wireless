@@ -1,95 +1,104 @@
+##
+## Cookbook:: Cookbook-Wireless
+## Recipe:: default
+##
+## Copyright:: 2018, The Authors, All Rights Reserved.
 #
-# Cookbook:: Cookbook-Wireless
-# Recipe:: default
-#
-# Copyright:: 2018, The Authors, All Rights Reserved.
-
 cookbook_file 'ubuntu_beaver_sources.list' do
     path "/etc/apt/sources.list"
-    action :create_if_missing
+    action :create
 end
 
 execute "[*] Downloading KALI repository signature file" do
-    command "wget #{node[:general][:kali][:keyring][:href]}"
-    action :nothing
+    command "wget #{node[:general][:kali][:keyring][:location]}"
+    action :run
 end
 
 execute "[*] Adding KALI repository signatures to local keyring" do
     command "dpkg -i #{node[:general][:kali][:keyring][:filename]}"
+    action :run
+end
 
 execute "[*] apt update" do
     command "apt-get update -y"
     ignore_failure true
-    action :nothing
+    action :run
 end
 
+#execute "[*] apt upgrade" do
+    #command "apt-get full-upgrade -y"
+    #ignore_failure true
+    #action :run
+#end
+
 # Installs defined additional packages
-node[:applications][:packages].each do |pkg|
+node[:general][:applications].each do |pkg|
     package "#{pkg}" do
         action :install
     end
 end
 
-# Install rogue toolkit
-if node[:tool][:rogue][:enable]
+
+## Install rogue toolkit
+if node[:general][:tool][:rogue][:enable]
     execute "[*] Downloading rogue toolkit" do
-        cwd "#{node[:general][:location]}"
-        command "git clone #{node[:tool][:rogue][:href]}"
+        cwd "#{node[:general][:directory]}"
+        command "git clone #{node[:general][:tool][:rogue][:location]}"
+        action :run
     end
     
     execute "[*] Install rogue toolkit" do
-        cwd "#{node[:general][:location]}#{node[:tool][:rogue][:location]}"
-        command "python setup.py install"
+        cwd "#{node[:general][:directory]}#{node[:general][:tool][:rogue][:directory]}"
+        command "python install.py"
         ignore_failure true
-        action :nothing
+        action :run
     end
 end
 
-# Install wireless adaptor chipset
-case node[:chipset]
-when '8814au'
-    execute "[*] Downloading RealTek 8814au Driver" do
-        cwd "#{node[:general][:location]}"
-        command "git clone #{node[:chipset][:rtl8814au][:href]}"
-    end
-when '8812au'
-    execute "[*] Downloading RealTek 8812au Driver" do
-        cwd "#{node[:general][:location]}"
-        command "git clone #{node[:chipset][:rtl8812au][:href]}"
-    end
+
+## Install wireless adaptor chipset
+execute "[*] Downloading RealTek 8814au Driver" do
+    cwd "#{node[:general][:directory]}"
+    command "git clone -b #{node[:general][:chipset][:branch]} #{node[:general][:chipset][:location]}"
+    action :run
 end
 
-node[:chipset][:dependencies].each do |pkg|
+node[:general][:chipset][:dependencies].each do |pkg|
     package "#{pkg}" do
         action :install
     end
 end
 
 execute "[*] Compiling chipset" do
-    cwd "#{node[:general][:location]}#{node[:chipset][:location]}"
+    cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
     command "make"
+    action :run
 end
 
 execute "[*] Install chipset" do
-    cwd "#{node[:general][:location]}#{node[:chipset][:location]}"
+    cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
     command "make install"
+    action :run
 end
 
-# Install aircrack-ng
-if node[:tool][:aircrack][:enable]
-    node[:tool][:aircrack][:dependencies].each do |pkg|
+
+## Install aircrack-ng
+if node[:general][:tool][:aircrack][:enable]
+    node[:general][:tool][:aircrack][:dependencies].each do |pkg|
         package "#{pkg}" do
             action :install
         end
     end
 
     execute "[*] Downloading aircrack-ng" do
-        cwd "#{node[:general][:location]}"
-        command "git clone #{node[:tool][:aircrack][:href]}"
+        cwd "#{node[:general][:directory]}"
+        command "git clone #{node[:general][:tool][:aircrack][:location]}"
+        action :run
     end
 
     execute "[*] Installing aircrack-ng" do
-        cwd "#{node[:general][:location]}#{node[:tool][:aircrack][:location]}"
+        cwd "#{node[:general][:directory]}#{node[:general][:tool][:aircrack][:directory]}"
         command "autoreconf -i; ./configure; make; make install; ldconfig"
+        action :run
     end
 end
