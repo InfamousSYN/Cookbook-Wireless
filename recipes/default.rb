@@ -140,3 +140,12 @@ if node[:general][:tool][:hcxdumptool][:enable]
         action :run
     end
 end
+
+
+## Install scapy
+if node[:general][:tool][:scapy][:enable]
+    execute "[*] Installing scapy" do
+        command "pip install #{node[:general][:tool][:scapy][:package]}"
+        action :run
+    end
+end
