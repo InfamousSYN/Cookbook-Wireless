@@ -102,3 +102,50 @@ if node[:general][:tool][:aircrack][:enable]
         action :run
     end
 end
+
+
+## Install hcxtools
+if node[:general][:tool][:hcxtools][:enable]
+    node[:general][:tool][:hcxtools][:dependencies].each do |pkg|
+        package "#{pkg}" do
+            action :install
+        end
+    end
+
+    execute "[*] Downloading hcxtools" do
+        cwd "#{node[:general][:directory]}"
+        command "git clone #{node[:general][:tool][:hcxtools][:location]}"
+        action :run
+    end
+
+    execute "[*] Installing hcxtools" do
+        cwd "#{node[:general][:directory]}#{node[:general][:tool][:hcxtools][:directory]}"
+        command "make; make install"
+        action :run
+    end
+end
+
+
+## Install hcxdumptool
+if node[:general][:tool][:hcxdumptool][:enable]
+    execute "[*] Downloading hcxdumptool" do
+        cwd "#{node[:general][:directory]}"
+        command "git clone #{node[:general][:tool][:hcxdumptool][:location]}"
+        action :run
+    end
+
+    execute "[*] Installing hcxdumptool" do
+        cwd "#{node[:general][:directory]}#{node[:general][:tool][:hcxdumptool][:directory]}"
+        command "make; make install"
+        action :run
+    end
+end
+
+
+## Install scapy
+if node[:general][:tool][:scapy][:enable]
+    execute "[*] Installing scapy" do
+        command "pip install #{node[:general][:tool][:scapy][:package]}"
+        action :run
+    end
+end
