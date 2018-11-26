@@ -39,3 +39,8 @@ default["general"]["tool"]["aircrack"]["enable"] = true
 default["general"]["tool"]["aircrack"]["location"] = "https://github.com/aircrack-ng/aircrack-ng.git"
 default["general"]["tool"]["aircrack"]["dependencies"] = ["build-essential", "autoconf", "automake", "libtool", "pkg-config", "libnl-3-dev", "libnl-genl-3-dev", "libssl-dev", "ethtool", "shtool", "rfkill", "zlib1g-dev", "libpcap-dev", "libsqlite3-dev", "libpcre3-dev", "libhwloc-dev", "libcmocka-dev"]
 default["general"]["tool"]["aircrack"]["directory"] = "/aircrack-ng"
+
+default['general']['tool']['hcxtools']["enable"] = true
+default['general']['tool']['hcxtools']["location"] = "https://github.com/ZerBea/hcxtools.git"
+default['general']['tool']['hcxtools']["dependencies"] = ["libcurl4-openssl-dev", "libssl-dev", "zlib1g-dev", "libpcap-dev"]
+default['general']['tool']['hcxtools']["directory"] = "/hcxtools"
