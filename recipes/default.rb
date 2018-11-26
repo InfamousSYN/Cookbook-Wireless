@@ -124,3 +124,19 @@ if node[:general][:tool][:hcxtools][:enable]
         action :run
     end
 end
+
+
+## Install hcxdumptool
+if node[:general][:tool][:hcxdumptool][:enable]
+    execute "[*] Downloading hcxdumptool" do
+        cwd "#{node[:general][:directory]}"
+        command "git clone #{node[:general][:tool][:hcxdumptool][:location]}"
+        action :run
+    end
+
+    execute "[*] Installing hcxdumptool" do
+        cwd "#{node[:general][:directory]}#{node[:general][:tool][:hcxdumptool][:directory]}"
+        command "make; make install"
+        action :run
+    end
+end

@@ -44,3 +44,7 @@ default['general']['tool']['hcxtools']["enable"] = true
 default['general']['tool']['hcxtools']["location"] = "https://github.com/ZerBea/hcxtools.git"
 default['general']['tool']['hcxtools']["dependencies"] = ["libcurl4-openssl-dev", "libssl-dev", "zlib1g-dev", "libpcap-dev"]
 default['general']['tool']['hcxtools']["directory"] = "/hcxtools"
+
+default['general']['tool']['hcxdumptool']["enable"] = true
+default['general']['tool']['hcxdumptool']["location"] = "https://github.com/ZerBea/hcxdumptool.git"
+default['general']['tool']['hcxdumptool']["directory"] = "/hcxdumptool"
