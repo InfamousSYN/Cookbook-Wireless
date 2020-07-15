@@ -8,8 +8,8 @@ default["general"]["user"] = "vagrant"
 default["general"]["group"] = "vagrant"
 default["general"]["directory"] = "/opt"
 default["general"]["ubuntu"]["beaver"]["sources"] = "ubuntu_beaver_sources.list"
-default["general"]["kali"]["keyring"]["location"] = "https://http.kali.org/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2018.1_all.deb"
-default["general"]["kali"]["keyring"]["filename"] = "kali-archive-keyring_2018.1_all.deb"
+default["general"]["kali"]["keyring"]["location"] = "https://archive.kali.org/archive-key.asc"
+default["general"]["kali"]["keyring"]["filename"] = "archive-key.asc"
 default["general"]["applications"] = ["ubuntu-desktop", "git", "wireshark", "python", "python-pip","wireless-tools"]
 
 ## Adaptor Chipset Attributes
