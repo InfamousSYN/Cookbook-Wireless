@@ -15,7 +15,7 @@ execute "[*] Downloading KALI repository signature file" do
 end
 
 execute "[*] Adding KALI repository signatures to local keyring" do
-    command "dpkg -i #{node[:general][:kali][:keyring][:filename]}"
+    command "sudo apt-key add #{node[:general][:kali][:keyring][:filename]}"
     action :run
 end
 
