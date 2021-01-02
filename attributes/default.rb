@@ -14,15 +14,27 @@ default["general"]["applications"] = ["ubuntu-desktop", "git", "wireshark", "pyt
 
 ## Adaptor Chipset Attributes
 default["general"]["chipset"]["driver"] = "8814au"
-default["general"]["chipset"]["location"] = "https://github.com/aircrack-ng/rtl8812au.git"
+default["general"]["chipset"]["dependencies"] = ["dkms", "build-essential", "bc", "libelf-dev"]
 case node["general"]["chipset"]["driver"]
 when "8814au"
-	default["general"]["chipset"]["branch"] = "v5.3.4"
+    default["general"]["chipset"]["location"] = "https://github.com/aircrack-ng/rtl8814au.git"
+    default["general"]["chipset"]["branch"] = "v5.8.5.1"
+    default["general"]["chipset"]["directory"] = "/rtl8814au"
 when "8812au"
-	default["general"]["chipset"]["branch"] = "v5.1.5"
-end	
-default["general"]["chipset"]["dependencies"] = ["dkms", "build-essential", "bc", "libelf-dev"]
-default["general"]["chipset"]["directory"] = "/rtl8812au"
+    default["general"]["chipset"]["location"] = "https://github.com/aircrack-ng/rtl8812au.git"
+    default["general"]["chipset"]["branch"] = "v5.3.4"
+    default["general"]["chipset"]["directory"] = "/rtl8812au"
+end
+
+
+# default["general"]["chipset"]["location"] = "https://github.com/aircrack-ng/rtl8812au.git"
+# case node["general"]["chipset"]["driver"]
+# when "8814au"
+# 	default["general"]["chipset"]["branch"] = "v5.3.4"
+# when "8812au"
+# 	default["general"]["chipset"]["branch"] = "v5.1.5"
+# end	
+#default["general"]["chipset"]["directory"] = "/rtl8812au"
 
 
 ## Tool Attributes
