@@ -4,32 +4,12 @@
 ##
 ## Copyright:: 2018, The Authors, All Rights Reserved.
 #
-cookbook_file 'ubuntu_beaver_sources.list' do
-    path "/etc/apt/sources.list"
-    action :create
-end
 
-execute "[*] Downloading KALI repository signature file" do
-    command "wget #{node[:general][:kali][:keyring][:location]}"
-    action :run
-end
-
-execute "[*] Adding KALI repository signatures to local keyring" do
-    command "sudo apt-key add #{node[:general][:kali][:keyring][:filename]}"
-    action :run
-end
-
-execute "[*] apt update" do
-    command "apt-get update -y"
-    ignore_failure true
-    action :run
-end
-
-#execute "[*] apt upgrade" do
-    #command "apt-get full-upgrade -y"
-    #ignore_failure true
-    #action :run
-#end
+log os.family
+if os.family == "debian"
+    include_recipe "cookbook::ubuntu"
+elsif os.family == "kali"
+    include_recipe "cookbook::kali"
 
 # Installs defined additional packages
 node[:general][:applications].each do |pkg|
@@ -49,7 +29,7 @@ if node[:general][:tool][:rogue][:enable]
     
     execute "[*] Install rogue toolkit" do
         cwd "#{node[:general][:directory]}#{node[:general][:tool][:rogue][:directory]}"
-        command "echo 'y' | python install.py"
+        command "echo "y" | python install.py"
         ignore_failure true
         action :run
     end
@@ -57,7 +37,7 @@ end
 
 
 ## Install wireless adaptor chipset
-execute "[*] Downloading RealTek 8814au Driver" do
+execute "[*] Downloading RealTek Driver" do
     cwd "#{node[:general][:directory]}"
     command "git clone -b #{node[:general][:chipset][:branch]} #{node[:general][:chipset][:location]}"
     action :run
