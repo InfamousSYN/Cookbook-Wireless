@@ -29,7 +29,7 @@ if node[:general][:tool][:rogue][:enable]
     
     execute "[*] Install rogue toolkit" do
         cwd "#{node[:general][:directory]}#{node[:general][:tool][:rogue][:directory]}"
-        command "echo "y" | python install.py"
+        command "echo 'y' | python install.py"
         ignore_failure true
         action :run
     end
