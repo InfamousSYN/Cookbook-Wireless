@@ -128,32 +128,6 @@ if node[:general][:tool][:rogue][:enable]
 end
 
 
-## Install wireless adaptor chipset
-execute "[*] Downloading RealTek Driver" do
-    cwd "#{node[:general][:directory]}"
-    command "git clone -b #{node[:general][:chipset][:branch]} #{node[:general][:chipset][:location]}"
-    action :run
-end
-
-node[:general][:chipset][:dependencies].each do |pkg|
-    package "#{pkg}" do
-        action :install
-    end
-end
-
-execute "[*] Compiling chipset" do
-    cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
-    command "make"
-    action :run
-end
-
-execute "[*] Install chipset" do
-    cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
-    command "make install"
-    action :run
-end
-
-
 ## Install aircrack-ng
 if node[:general][:tool][:aircrack][:enable]
     execute "[*] Downloading aircrack-ng" do
