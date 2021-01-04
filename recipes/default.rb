@@ -193,7 +193,16 @@ if node[:general][:tool][:hcxdumptool][:enable]
     execute "[*] Downloading hcxdumptool" do
         cwd "#{node[:general][:directory]}"
         command "git clone #{node[:general][:tool][:hcxdumptool][:location]}"
+        user "#{node[:general][:user]}"
+        group "#{node[:general][:group]}"
+        ignore_failure true
         action :run
+    end
+
+    node[:general][:tool][:hcxdumptool][:dependencies].each do |pkg|
+        package "#{pkg}" do
+            action :install
+        end
     end
 
     execute "[*] Installing hcxdumptool" do

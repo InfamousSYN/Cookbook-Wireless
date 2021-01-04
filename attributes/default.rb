@@ -53,6 +53,7 @@ default['general']['tool']['hcxtools']["directory"] = "/hcxtools"
 default['general']['tool']['hcxdumptool']["enable"] = true
 default['general']['tool']['hcxdumptool']["location"] = "https://github.com/ZerBea/hcxdumptool.git"
 default['general']['tool']['hcxdumptool']["directory"] = "/hcxdumptool"
+default['general']['tool']['hcxdumptool']["dependencies"] = ["libcurl4-openssl-dev", "libssl-dev", "pkg-config"]
 
 default['general']['tool']['scapy']['enable'] = true
 default['general']['tool']['scapy']['package'] = "scapy-python3"
