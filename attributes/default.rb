@@ -4,6 +4,7 @@
 #
 
 ## General Attributes
+default["general"]["cookbook"]["name"] = "Cookbook-Wireless"
 default["general"]["user"] = "vagrant"
 default["general"]["group"] = "vagrant"
 default["general"]["directory"] = "/opt"
