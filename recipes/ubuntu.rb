@@ -25,3 +25,10 @@ execute "[*] apt update" do
     ignore_failure true
     action :run
 end
+
+# Installs defined additional packages
+node[:general][:applications].each do |pkg|
+    package "#{pkg}" do
+        action :install
+    end
+end
