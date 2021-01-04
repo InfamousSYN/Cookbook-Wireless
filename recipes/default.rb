@@ -5,19 +5,99 @@
 ## Copyright:: 2018, The Authors, All Rights Reserved.
 #
 
-log os.family
-if os.family == "debian"
-    include_recipe "cookbook::ubuntu"
-elsif os.family == "kali"
-    include_recipe "cookbook::kali"
+require "ohai"
 
-# Installs defined additional packages
-node[:general][:applications].each do |pkg|
-    package "#{pkg}" do
-        action :install
-    end
+if node["platform"] == "debian"
+    include_recipe "#{node[:general][:cookbook][:name]}::ubuntu"
+elsif node["platform"] == "kali"
+    include_recipe "#{node[:general][:cookbook][:name]}::kali"
 end
 
+if node[:general][:chipset][:driver] == "apt"
+    execute "[*] apt update do" do
+        command "apt-get update -y"
+        ignore_failure true
+        action :true
+    end
+
+    execute "[*] apt install realtek driver" do
+        command "apt-get install #{node[:general][:chipset][:apt][:realtek][:package]}"
+        ignore_failure true
+        action :run
+    end
+
+elsif node[:general][:chipset][:driver] == "8814au"
+
+    ## Install wireless adaptor chipset
+    execute "[*] Downloading RealTek Driver" do
+        cwd "#{node[:general][:directory]}"
+        command "git clone -b #{node[:general][:chipset][:branch]} #{node[:general][:chipset][:location]}"
+        user "#{node[:general][:user]}"
+        group "#{node[:general][:group]}"
+        ignore_failure true
+        action :run
+    end
+
+    execute "[*] apt upgrade" do
+        command "apt update -y"
+        ignore_failure true
+        action :run
+    end
+
+    node[:general][:chipset][:dependencies].each do |pkg|
+        package "#{pkg}" do
+            action :install
+        end
+    end
+
+    execute "[*] Compiling chipset" do
+        cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
+        command "make"
+        action :run
+    end
+
+    execute "[*] Install chipset" do
+        cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
+        command "make"
+        action :run
+    end
+
+elsif node[:general][:chipset][:driver] == "8812au"
+
+    ## Install wireless adaptor chipset
+    execute "[*] Downloading RealTek Driver" do
+        cwd "#{node[:general][:directory]}"
+        command "git clone -b #{node[:general][:chipset][:branch]} #{node[:general][:chipset][:location]}"
+        user "#{node[:general][:user]}"
+        group "#{node[:general][:group]}"
+        ignore_failure true
+        action :run
+    end
+
+    execute "[*] apt upgrade" do
+        command "apt update -y"
+        ignore_failure true
+        action :run
+    end
+
+    node[:general][:chipset][:dependencies].each do |pkg|
+        package "#{pkg}" do
+            action :install
+        end
+    end
+
+    execute "[*] Compiling chipset" do
+        cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
+        command "make"
+        action :run
+    end
+
+    execute "[*] Install chipset" do
+        cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
+        command "make"
+        action :run
+    end
+end
 
 ## Install rogue toolkit
 if node[:general][:tool][:rogue][:enable]
