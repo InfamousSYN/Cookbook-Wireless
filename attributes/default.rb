@@ -13,7 +13,7 @@ default["general"]["kali"]["keyring"]["filename"] = "archive-key.asc"
 default["general"]["applications"] = ["ubuntu-desktop", "git", "wireshark", "python", "python-pip","wireless-tools"]
 
 ## Adaptor Chipset Attributes
-default["general"]["chipset"]["driver"] = "8814au"
+default["general"]["chipset"]["driver"] = "apt"
 default["general"]["chipset"]["dependencies"] = ["dkms", "build-essential", "bc", "libelf-dev"]
 case node["general"]["chipset"]["driver"]
 when "8814au"
@@ -24,18 +24,9 @@ when "8812au"
     default["general"]["chipset"]["location"] = "https://github.com/aircrack-ng/rtl8812au.git"
     default["general"]["chipset"]["branch"] = "v5.3.4"
     default["general"]["chipset"]["directory"] = "/rtl8812au"
+when "apt"
+    default["general"]["chipset"]["apt"]["realtek"]["package"] = "realtek-rtl88xxau-dkms"
 end
-
-
-# default["general"]["chipset"]["location"] = "https://github.com/aircrack-ng/rtl8812au.git"
-# case node["general"]["chipset"]["driver"]
-# when "8814au"
-# 	default["general"]["chipset"]["branch"] = "v5.3.4"
-# when "8812au"
-# 	default["general"]["chipset"]["branch"] = "v5.1.5"
-# end	
-#default["general"]["chipset"]["directory"] = "/rtl8812au"
-
 
 ## Tool Attributes
 default["general"]["tool"]["rogue"]["enable"] = true
