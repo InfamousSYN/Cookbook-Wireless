@@ -206,8 +206,14 @@ end
 
 ## Install scapy
 if node[:general][:tool][:scapy][:enable]
+    node[:general][:tool][:scapy][:dependencies].each do |pkg|
+        package "#{pkg}" do
+            action :install
+        end
+    end
+
     execute "[*] Installing scapy" do
-        command "pip install #{node[:general][:tool][:scapy][:package]}"
+        command "pip3 install #{node[:general][:tool][:scapy][:package]}"
         action :run
     end
 end

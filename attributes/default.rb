@@ -55,4 +55,5 @@ default['general']['tool']['hcxdumptool']["location"] = "https://github.com/ZerB
 default['general']['tool']['hcxdumptool']["directory"] = "/hcxdumptool"
 
 default['general']['tool']['scapy']['enable'] = true
-default['general']['tool']['scapy']['package'] = "scapy"
+default['general']['tool']['scapy']['package'] = "scapy-python3"
+default["general"]["tool"]["scapy"]["dependencies"] = ["python3-pip"]
