@@ -13,89 +13,91 @@ elsif node["platform"] == "kali"
     include_recipe "#{node[:general][:cookbook][:name]}::kali"
 end
 
-if node[:general][:chipset][:driver] == "apt"
-    execute "[*] apt update do" do
-        command "apt-get update -y"
-        ignore_failure true
-        action :true
-    end
-
-    execute "[*] apt install realtek driver" do
-        command "apt-get install #{node[:general][:chipset][:apt][:realtek][:package]}"
-        ignore_failure true
-        action :run
-    end
-
-elsif node[:general][:chipset][:driver] == "8814au"
-
-    ## Install wireless adaptor chipset
-    execute "[*] Downloading RealTek Driver" do
-        cwd "#{node[:general][:directory]}"
-        command "git clone -b #{node[:general][:chipset][:branch]} #{node[:general][:chipset][:location]}"
-        user "#{node[:general][:user]}"
-        group "#{node[:general][:group]}"
-        ignore_failure true
-        action :run
-    end
-
-    execute "[*] apt upgrade" do
-        command "apt update -y"
-        ignore_failure true
-        action :run
-    end
-
-    node[:general][:chipset][:dependencies].each do |pkg|
-        package "#{pkg}" do
-            action :install
+if node[:general][:chipset][:enable]
+    if node[:general][:chipset][:driver] == "apt"
+        execute "[*] apt update do" do
+            command "apt-get update -y"
+            ignore_failure true
+            action :true
         end
-    end
 
-    execute "[*] Compiling chipset" do
-        cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
-        command "make"
-        action :run
-    end
-
-    execute "[*] Install chipset" do
-        cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
-        command "make"
-        action :run
-    end
-
-elsif node[:general][:chipset][:driver] == "8812au"
-
-    ## Install wireless adaptor chipset
-    execute "[*] Downloading RealTek Driver" do
-        cwd "#{node[:general][:directory]}"
-        command "git clone -b #{node[:general][:chipset][:branch]} #{node[:general][:chipset][:location]}"
-        user "#{node[:general][:user]}"
-        group "#{node[:general][:group]}"
-        ignore_failure true
-        action :run
-    end
-
-    execute "[*] apt upgrade" do
-        command "apt update -y"
-        ignore_failure true
-        action :run
-    end
-
-    node[:general][:chipset][:dependencies].each do |pkg|
-        package "#{pkg}" do
-            action :install
+        execute "[*] apt install realtek driver" do
+            command "apt-get install #{node[:general][:chipset][:apt][:realtek][:package]}"
+            ignore_failure true
+            action :run
         end
-    end
 
-    execute "[*] Compiling chipset" do
-        cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
-        command "make"
-        action :run
-    end
+    elsif node[:general][:chipset][:driver] == "8814au"
+    
+        ## Install wireless adaptor chipset
+        execute "[*] Downloading RealTek Driver" do
+            cwd "#{node[:general][:directory]}"
+            command "git clone -b #{node[:general][:chipset][:branch]} #{node[:general][:chipset][:location]}"
+            user "#{node[:general][:user]}"
+            group "#{node[:general][:group]}"
+            ignore_failure true
+            action :run
+        end
 
-    execute "[*] Install chipset" do
-        cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
-        command "make"
-        action :run
+        execute "[*] apt upgrade" do
+            command "apt update -y"
+            ignore_failure true
+            action :run
+        end
+
+        node[:general][:chipset][:dependencies].each do |pkg|
+            package "#{pkg}" do
+                action :install
+            end
+        end
+
+        execute "[*] Compiling chipset" do
+            cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
+            command "make"
+            action :run
+        end
+
+        execute "[*] Install chipset" do
+            cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
+            command "make"
+            action :run
+        end
+
+    elsif node[:general][:chipset][:driver] == "8812au"
+    
+        ## Install wireless adaptor chipset
+        execute "[*] Downloading RealTek Driver" do
+            cwd "#{node[:general][:directory]}"
+            command "git clone -b #{node[:general][:chipset][:branch]} #{node[:general][:chipset][:location]}"
+            user "#{node[:general][:user]}"
+            group "#{node[:general][:group]}"
+            ignore_failure true
+            action :run
+        end
+
+        execute "[*] apt upgrade" do
+            command "apt update -y"
+            ignore_failure true
+            action :run
+        end
+
+        node[:general][:chipset][:dependencies].each do |pkg|
+            package "#{pkg}" do
+                action :install
+            end
+        end
+
+        execute "[*] Compiling chipset" do
+            cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
+            command "make"
+            action :run
+        end
+
+        execute "[*] Install chipset" do
+            cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
+            command "make"
+            action :run
+        end
     end
 end
 

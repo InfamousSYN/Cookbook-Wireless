@@ -14,6 +14,7 @@ default["general"]["kali"]["keyring"]["filename"] = "archive-key.asc"
 default["general"]["applications"] = ["ubuntu-desktop", "git", "wireshark", "python", "python-pip","wireless-tools"]
 
 ## Adaptor Chipset Attributes
+default["general"]["chipset"]["enable"] = true
 default["general"]["chipset"]["driver"] = "apt"
 default["general"]["chipset"]["dependencies"] = ["dkms", "build-essential", "bc", "libelf-dev"]
 case node["general"]["chipset"]["driver"]
