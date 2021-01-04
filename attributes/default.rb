@@ -34,6 +34,7 @@ end
 default["general"]["tool"]["rogue"]["enable"] = true
 default["general"]["tool"]["rogue"]["location"] = "https://github.com/InfamousSYN/rogue.git"
 default["general"]["tool"]["rogue"]["directory"] = "/rogue"
+default["general"]["tool"]["rogue"]["dependencies"] = ["python3-pip"]
 
 default["general"]["tool"]["eapeak"]["enable"] = false
 default["general"]["tool"]["eapeak"]["location"] = "https://github.com/securestate/eapeak.git"

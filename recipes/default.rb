@@ -105,13 +105,23 @@ end
 if node[:general][:tool][:rogue][:enable]
     execute "[*] Downloading rogue toolkit" do
         cwd "#{node[:general][:directory]}"
-        command "git clone #{node[:general][:tool][:rogue][:location]}"
+        command "sudo git clone #{node[:general][:tool][:rogue][:location]}"
+        user "#{node[:general][:user]}"
+        group "#{node[:general][:group]}"
         action :run
     end
-    
+
+    node[:general][:tool][:rogue][:dependencies].each do |pkg|
+        package "#{pkg}" do
+            action :install
+        end
+    end
+
     execute "[*] Install rogue toolkit" do
         cwd "#{node[:general][:directory]}#{node[:general][:tool][:rogue][:directory]}"
-        command "echo 'y' | python install.py"
+        command "echo 'y' | sudo python3 install.py"
+        user "#{node[:general][:user]}"
+        group "#{node[:general][:group]}"
         ignore_failure true
         action :run
     end
