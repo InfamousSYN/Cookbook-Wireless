@@ -146,16 +146,18 @@ end
 
 ## Install aircrack-ng
 if node[:general][:tool][:aircrack][:enable]
+    execute "[*] Downloading aircrack-ng" do
+        cwd "#{node[:general][:directory]}"
+        command "sudo git clone #{node[:general][:tool][:aircrack][:location]}"
+        user "#{node[:general][:user]}"
+        group "#{node[:general][:group]}"
+        action :run
+    end
+
     node[:general][:tool][:aircrack][:dependencies].each do |pkg|
         package "#{pkg}" do
             action :install
         end
-    end
-
-    execute "[*] Downloading aircrack-ng" do
-        cwd "#{node[:general][:directory]}"
-        command "git clone #{node[:general][:tool][:aircrack][:location]}"
-        action :run
     end
 
     execute "[*] Installing aircrack-ng" do
