@@ -168,16 +168,18 @@ end
 
 ## Install hcxtools
 if node[:general][:tool][:hcxtools][:enable]
+    execute "[*] Downloading hcxtools" do
+        cwd "#{node[:general][:directory]}"
+        command "sudo git clone #{node[:general][:tool][:hcxtools][:location]}"
+        user "#{node[:general][:user]}"
+        group "#{node[:general][:group]}"
+        action :run
+    end
+
     node[:general][:tool][:hcxtools][:dependencies].each do |pkg|
         package "#{pkg}" do
             action :install
         end
-    end
-
-    execute "[*] Downloading hcxtools" do
-        cwd "#{node[:general][:directory]}"
-        command "git clone #{node[:general][:tool][:hcxtools][:location]}"
-        action :run
     end
 
     execute "[*] Installing hcxtools" do
