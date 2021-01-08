@@ -4,96 +4,144 @@
 ##
 ## Copyright:: 2018, The Authors, All Rights Reserved.
 #
-cookbook_file 'ubuntu_beaver_sources.list' do
-    path "/etc/apt/sources.list"
-    action :create
+
+require "ohai"
+
+if node["platform"] == "debian"
+    include_recipe "#{node[:general][:cookbook][:name]}::ubuntu"
+elsif node["platform"] == "kali"
+    include_recipe "#{node[:general][:cookbook][:name]}::kali"
 end
 
-execute "[*] Downloading KALI repository signature file" do
-    command "wget #{node[:general][:kali][:keyring][:location]}"
-    action :run
-end
+if node[:general][:chipset][:enable]
+    if node[:general][:chipset][:driver] == "apt"
+        execute "[*] apt update do" do
+            command "apt-get update -y"
+            ignore_failure true
+            action :true
+        end
 
-execute "[*] Adding KALI repository signatures to local keyring" do
-    command "dpkg -i #{node[:general][:kali][:keyring][:filename]}"
-    action :run
-end
+        execute "[*] apt install realtek driver" do
+            command "apt-get install #{node[:general][:chipset][:apt][:realtek][:package]}"
+            ignore_failure true
+            action :run
+        end
 
-execute "[*] apt update" do
-    command "apt-get update -y"
-    ignore_failure true
-    action :run
-end
+    elsif node[:general][:chipset][:driver] == "8814au"
+    
+        ## Install wireless adaptor chipset
+        execute "[*] Downloading RealTek Driver" do
+            cwd "#{node[:general][:directory]}"
+            command "git clone -b #{node[:general][:chipset][:branch]} #{node[:general][:chipset][:location]}"
+            user "#{node[:general][:user]}"
+            group "#{node[:general][:group]}"
+            ignore_failure true
+            action :run
+        end
 
-#execute "[*] apt upgrade" do
-    #command "apt-get full-upgrade -y"
-    #ignore_failure true
-    #action :run
-#end
+        execute "[*] apt upgrade" do
+            command "apt update -y"
+            ignore_failure true
+            action :run
+        end
 
-# Installs defined additional packages
-node[:general][:applications].each do |pkg|
-    package "#{pkg}" do
-        action :install
+        node[:general][:chipset][:dependencies].each do |pkg|
+            package "#{pkg}" do
+                action :install
+            end
+        end
+
+        execute "[*] Compiling chipset" do
+            cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
+            command "make"
+            action :run
+        end
+
+        execute "[*] Install chipset" do
+            cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
+            command "make"
+            action :run
+        end
+
+    elsif node[:general][:chipset][:driver] == "8812au"
+    
+        ## Install wireless adaptor chipset
+        execute "[*] Downloading RealTek Driver" do
+            cwd "#{node[:general][:directory]}"
+            command "git clone -b #{node[:general][:chipset][:branch]} #{node[:general][:chipset][:location]}"
+            user "#{node[:general][:user]}"
+            group "#{node[:general][:group]}"
+            ignore_failure true
+            action :run
+        end
+
+        execute "[*] apt upgrade" do
+            command "apt update -y"
+            ignore_failure true
+            action :run
+        end
+
+        node[:general][:chipset][:dependencies].each do |pkg|
+            package "#{pkg}" do
+                action :install
+            end
+        end
+
+        execute "[*] Compiling chipset" do
+            cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
+            command "make"
+            action :run
+        end
+
+        execute "[*] Install chipset" do
+            cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
+            command "make"
+            action :run
+        end
     end
 end
-
 
 ## Install rogue toolkit
 if node[:general][:tool][:rogue][:enable]
     execute "[*] Downloading rogue toolkit" do
         cwd "#{node[:general][:directory]}"
-        command "git clone #{node[:general][:tool][:rogue][:location]}"
+        command "sudo git clone #{node[:general][:tool][:rogue][:location]}"
+        user "#{node[:general][:user]}"
+        group "#{node[:general][:group]}"
         action :run
     end
-    
+
+    node[:general][:tool][:rogue][:dependencies].each do |pkg|
+        package "#{pkg}" do
+            action :install
+        end
+    end
+
     execute "[*] Install rogue toolkit" do
         cwd "#{node[:general][:directory]}#{node[:general][:tool][:rogue][:directory]}"
-        command "echo 'y' | python install.py"
+        command "echo 'y' | sudo python3 install.py"
+        user "#{node[:general][:user]}"
+        group "#{node[:general][:group]}"
         ignore_failure true
         action :run
     end
 end
 
 
-## Install wireless adaptor chipset
-execute "[*] Downloading RealTek 8814au Driver" do
-    cwd "#{node[:general][:directory]}"
-    command "git clone -b #{node[:general][:chipset][:branch]} #{node[:general][:chipset][:location]}"
-    action :run
-end
-
-node[:general][:chipset][:dependencies].each do |pkg|
-    package "#{pkg}" do
-        action :install
-    end
-end
-
-execute "[*] Compiling chipset" do
-    cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
-    command "make"
-    action :run
-end
-
-execute "[*] Install chipset" do
-    cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
-    command "make install"
-    action :run
-end
-
-
 ## Install aircrack-ng
 if node[:general][:tool][:aircrack][:enable]
+    execute "[*] Downloading aircrack-ng" do
+        cwd "#{node[:general][:directory]}"
+        command "sudo git clone #{node[:general][:tool][:aircrack][:location]}"
+        user "#{node[:general][:user]}"
+        group "#{node[:general][:group]}"
+        action :run
+    end
+
     node[:general][:tool][:aircrack][:dependencies].each do |pkg|
         package "#{pkg}" do
             action :install
         end
-    end
-
-    execute "[*] Downloading aircrack-ng" do
-        cwd "#{node[:general][:directory]}"
-        command "git clone #{node[:general][:tool][:aircrack][:location]}"
-        action :run
     end
 
     execute "[*] Installing aircrack-ng" do
@@ -106,16 +154,18 @@ end
 
 ## Install hcxtools
 if node[:general][:tool][:hcxtools][:enable]
+    execute "[*] Downloading hcxtools" do
+        cwd "#{node[:general][:directory]}"
+        command "sudo git clone #{node[:general][:tool][:hcxtools][:location]}"
+        user "#{node[:general][:user]}"
+        group "#{node[:general][:group]}"
+        action :run
+    end
+
     node[:general][:tool][:hcxtools][:dependencies].each do |pkg|
         package "#{pkg}" do
             action :install
         end
-    end
-
-    execute "[*] Downloading hcxtools" do
-        cwd "#{node[:general][:directory]}"
-        command "git clone #{node[:general][:tool][:hcxtools][:location]}"
-        action :run
     end
 
     execute "[*] Installing hcxtools" do
@@ -131,7 +181,16 @@ if node[:general][:tool][:hcxdumptool][:enable]
     execute "[*] Downloading hcxdumptool" do
         cwd "#{node[:general][:directory]}"
         command "git clone #{node[:general][:tool][:hcxdumptool][:location]}"
+        user "#{node[:general][:user]}"
+        group "#{node[:general][:group]}"
+        ignore_failure true
         action :run
+    end
+
+    node[:general][:tool][:hcxdumptool][:dependencies].each do |pkg|
+        package "#{pkg}" do
+            action :install
+        end
     end
 
     execute "[*] Installing hcxdumptool" do
@@ -144,8 +203,14 @@ end
 
 ## Install scapy
 if node[:general][:tool][:scapy][:enable]
+    node[:general][:tool][:scapy][:dependencies].each do |pkg|
+        package "#{pkg}" do
+            action :install
+        end
+    end
+
     execute "[*] Installing scapy" do
-        command "pip install #{node[:general][:tool][:scapy][:package]}"
+        command "pip3 install #{node[:general][:tool][:scapy][:package]}"
         action :run
     end
 end
