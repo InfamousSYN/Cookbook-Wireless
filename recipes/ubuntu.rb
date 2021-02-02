@@ -20,11 +20,7 @@ execute "[*] Adding KALI repository signatures to local keyring" do
     action :run
 end
 
-execute "[*] apt update" do
-    command "apt-get update -y"
-    ignore_failure true
-    action :run
-end
+apt_update
 
 # Installs defined additional packages
 node[:general][:applications].each do |pkg|
