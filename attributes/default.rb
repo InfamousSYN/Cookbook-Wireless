@@ -11,7 +11,7 @@ default["general"]["directory"] = "/opt"
 default["general"]["ubuntu"]["beaver"]["sources"] = "ubuntu_beaver_sources.list"
 default["general"]["kali"]["keyring"]["location"] = "https://archive.kali.org/archive-key.asc"
 default["general"]["kali"]["keyring"]["filename"] = "archive-key.asc"
-default["general"]["applications"] = ["ubuntu-desktop", "git", "wireshark", "python", "python-pip","wireless-tools"]
+default["general"]["applications"] = ["git", "wireshark", "python3", "python3-pip","wireless-tools"]
 
 ## Adaptor Chipset Attributes
 default["general"]["chipset"]["enable"] = true
