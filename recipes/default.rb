@@ -15,11 +15,7 @@ end
 
 if node[:general][:chipset][:enable]
     if node[:general][:chipset][:driver] == "apt"
-        execute "[*] apt update do" do
-            command "apt-get update -y"
-            ignore_failure true
-            action :true
-        end
+        apt_update
 
         execute "[*] apt install realtek driver" do
             command "apt-get install #{node[:general][:chipset][:apt][:realtek][:package]}"
@@ -39,11 +35,7 @@ if node[:general][:chipset][:enable]
             action :run
         end
 
-        execute "[*] apt upgrade" do
-            command "apt update -y"
-            ignore_failure true
-            action :run
-        end
+        apt_update
 
         node[:general][:chipset][:dependencies].each do |pkg|
             package "#{pkg}" do
@@ -75,11 +67,7 @@ if node[:general][:chipset][:enable]
             action :run
         end
 
-        execute "[*] apt upgrade" do
-            command "apt update -y"
-            ignore_failure true
-            action :run
-        end
+        apt_update
 
         node[:general][:chipset][:dependencies].each do |pkg|
             package "#{pkg}" do
