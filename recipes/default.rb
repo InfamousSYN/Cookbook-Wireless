@@ -7,7 +7,7 @@
 
 require "ohai"
 
-if node["platform"] == "debian"
+if node["platform"] == "ubuntu"
     include_recipe "#{node[:general][:cookbook][:name]}::ubuntu"
 elsif node["platform"] == "kali"
     include_recipe "#{node[:general][:cookbook][:name]}::kali"
