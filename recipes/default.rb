@@ -168,7 +168,7 @@ end
 if node[:general][:tool][:hcxdumptool][:enable]
     execute "[*] Downloading hcxdumptool" do
         cwd "#{node[:general][:directory]}"
-        command "git clone #{node[:general][:tool][:hcxdumptool][:location]}"
+        command "sudo git clone #{node[:general][:tool][:hcxdumptool][:location]}"
         user "#{node[:general][:user]}"
         group "#{node[:general][:group]}"
         ignore_failure true
