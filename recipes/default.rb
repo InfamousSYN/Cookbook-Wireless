@@ -20,9 +20,10 @@ if node[:general][:chipset][:enable]
             action :run
         end
 
-        execute "[*] apt install realtek driver" do
-            command "apt-get install #{node[:general][:chipset][:apt][:realtek][:package]}"
-            action :run
+        node[:general][:chipset][:apt][:realtek][:package].each do |pkg|
+            package "#{pkg}" do
+                action :install
+            end
         end
 
     elsif node[:general][:chipset][:driver] == "8814au"

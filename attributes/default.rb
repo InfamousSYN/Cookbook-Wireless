@@ -27,7 +27,7 @@ when "8812au"
     default[:general][:chipset][:branch] = "v5.3.4"
     default[:general][:chipset][:directory] = "/rtl8812au"
 when "apt"
-    default[:general][:chipset][:apt][:realtek][:package] = "realtek-rtl88xxau-dkms"
+    default[:general][:chipset][:apt][:realtek][:package] = ["realtek-rtl88xxau-dkms"]
 end
 
 ## Tool Attributes
