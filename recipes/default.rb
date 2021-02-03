@@ -15,11 +15,13 @@ end
 
 if node[:general][:chipset][:enable]
     if node[:general][:chipset][:driver] == "apt"
-        apt_update
+        execute "[*] apt update do" do
+            command "apt-get update -y"
+            action :run
+        end
 
         execute "[*] apt install realtek driver" do
             command "apt-get install #{node[:general][:chipset][:apt][:realtek][:package]}"
-            ignore_failure true
             action :run
         end
 
@@ -31,11 +33,13 @@ if node[:general][:chipset][:enable]
             command "git clone -b #{node[:general][:chipset][:branch]} #{node[:general][:chipset][:location]}"
             user "#{node[:general][:user]}"
             group "#{node[:general][:group]}"
-            ignore_failure true
             action :run
         end
 
-        apt_update
+        execute "[*] apt update do" do
+            command "apt-get update -y"
+            action :run
+        end
 
         node[:general][:chipset][:dependencies].each do |pkg|
             package "#{pkg}" do
@@ -63,11 +67,13 @@ if node[:general][:chipset][:enable]
             command "git clone -b #{node[:general][:chipset][:branch]} #{node[:general][:chipset][:location]}"
             user "#{node[:general][:user]}"
             group "#{node[:general][:group]}"
-            ignore_failure true
             action :run
         end
 
-        apt_update
+        execute "[*] apt update do" do
+            command "apt-get update -y"
+            action :run
+        end
 
         node[:general][:chipset][:dependencies].each do |pkg|
             package "#{pkg}" do
@@ -110,7 +116,6 @@ if node[:general][:tool][:rogue][:enable]
         command "echo 'y' | sudo python3 install.py"
         user "#{node[:general][:user]}"
         group "#{node[:general][:group]}"
-        ignore_failure true
         action :run
     end
 end
@@ -171,7 +176,6 @@ if node[:general][:tool][:hcxdumptool][:enable]
         command "sudo git clone #{node[:general][:tool][:hcxdumptool][:location]}"
         user "#{node[:general][:user]}"
         group "#{node[:general][:group]}"
-        ignore_failure true
         action :run
     end
 
