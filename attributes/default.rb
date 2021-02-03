@@ -48,7 +48,7 @@ default["general"]["tool"]["aircrack"]["directory"] = "/aircrack-ng"
 
 default['general']['tool']['hcxtools']["enable"] = true
 default['general']['tool']['hcxtools']["location"] = "https://github.com/ZerBea/hcxtools.git"
-default['general']['tool']['hcxtools']["dependencies"] = ["libcurl4-openssl-dev", "libssl-dev", "zlib1g-dev", "libpcap-dev"]
+default['general']['tool']['hcxtools']["dependencies"] = ["libcurl4-openssl-dev", "libssl-dev", "zlib1g", "zlib1g-dev", "libpcap-dev"]
 default['general']['tool']['hcxtools']["directory"] = "/hcxtools"
 
 default['general']['tool']['hcxdumptool']["enable"] = true
