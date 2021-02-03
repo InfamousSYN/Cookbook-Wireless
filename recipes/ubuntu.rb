@@ -5,7 +5,7 @@
 ## Copyright:: 2018, The Authors, All Rights Reserved.
 #
 
-cookbook_file 'ubuntu_beaver_sources.list' do
+cookbook_file 'ubuntu_focal_sources.list' do
     path "/etc/apt/sources.list"
     action :create
 end
