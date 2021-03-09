@@ -4,11 +4,13 @@
 #
 
 ## General Attributes
-default[:general][:cookbook][:name] = "Cookbook-Wireless"
 default[:general][:user] = "vagrant"
 default[:general][:group] = "vagrant"
 default[:general][:directory] = "/opt"
-default[:general][:ubuntu][:beaver][:sources] = "ubuntu_beaver_sources.list"
+default[:general][:ubuntu][:version] = "focal"
+default[:general][:ubuntu][:focal][:sources] = "ubuntu_focal_sources.list"
+default[:general][:ubuntu][:bionic][:sources] = "ubuntu_beaver_sources.list"
+default[:general][:ubuntu][:trusty][:sources] = "ubuntu_trusty_sources.list"
 default[:general][:kali][:keyring][:location] = "https://archive.kali.org/archive-key.asc"
 default[:general][:kali][:keyring][:filename] = "archive-key.asc"
 default[:general][:applications] = ["git", "wireshark", "python3", "python3-pip","wireless-tools"]
