@@ -8,20 +8,37 @@
 require "ohai"
 
 if node["platform"] == "ubuntu"
-    include_recipe "#{node[:general][:cookbook][:name]}::ubuntu"
+    include_recipe '::ubuntu'
 elsif node["platform"] == "kali"
-    include_recipe "#{node[:general][:cookbook][:name]}::kali"
+    include_recipe '::kali'
 end
 
 if node[:general][:chipset][:enable]
-    if node[:general][:chipset][:driver] == "apt"
-        execute "[*] apt update do" do
-            command "apt-get update -y"
-            action :run
-        end
+    execute "[*] apt update do" do
+        command "apt-get update -y"
+        sensitive true
+        action :run
+    end
 
+    node[:general][:chipset][:dependencies].each do |pkg|
+        package "#{pkg}" do
+            sensitive true
+            action :install
+        end
+    end
+
+    # Ensure headers for the current kernel are installed
+    uname = Mixlib::ShellOut.new("uname -r")
+    kernel = uname.run_command.stdout.chomp
+    package "linux-headers-#{kernel}" do
+        not_if { File.directory?("/usr/src/linux-headers-#{kernel}") }
+        ignore_failure true
+    end
+
+    if node[:general][:chipset][:driver] == "apt"
         node[:general][:chipset][:apt][:realtek][:package].each do |pkg|
             package "#{pkg}" do
+                sensitive true
                 action :install
             end
         end
@@ -31,32 +48,15 @@ if node[:general][:chipset][:enable]
         ## Install wireless adaptor chipset
         execute "[*] Downloading RealTek Driver" do
             cwd "#{node[:general][:directory]}"
-            command "git clone -b #{node[:general][:chipset][:branch]} #{node[:general][:chipset][:location]}"
+            command "sudo git clone -b #{node[:general][:chipset][:branch]} #{node[:general][:chipset][:location]}"
             user "#{node[:general][:user]}"
             group "#{node[:general][:group]}"
             action :run
         end
 
-        execute "[*] apt update do" do
-            command "apt-get update -y"
-            action :run
-        end
-
-        node[:general][:chipset][:dependencies].each do |pkg|
-            package "#{pkg}" do
-                action :install
-            end
-        end
-
-        execute "[*] Compiling chipset" do
-            cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
-            command "make"
-            action :run
-        end
-
         execute "[*] Install chipset" do
             cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
-            command "make"
+            command "sudo make; sudo make install"
             action :run
         end
 
@@ -65,32 +65,15 @@ if node[:general][:chipset][:enable]
         ## Install wireless adaptor chipset
         execute "[*] Downloading RealTek Driver" do
             cwd "#{node[:general][:directory]}"
-            command "git clone -b #{node[:general][:chipset][:branch]} #{node[:general][:chipset][:location]}"
+            command "sudo git clone -b #{node[:general][:chipset][:branch]} #{node[:general][:chipset][:location]}"
             user "#{node[:general][:user]}"
             group "#{node[:general][:group]}"
             action :run
         end
 
-        execute "[*] apt update do" do
-            command "apt-get update -y"
-            action :run
-        end
-
-        node[:general][:chipset][:dependencies].each do |pkg|
-            package "#{pkg}" do
-                action :install
-            end
-        end
-
-        execute "[*] Compiling chipset" do
-            cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
-            command "make"
-            action :run
-        end
-
         execute "[*] Install chipset" do
             cwd "#{node[:general][:directory]}#{node[:general][:chipset][:directory]}"
-            command "make"
+            command "sudo make; sudo make install"
             action :run
         end
     end
@@ -108,6 +91,7 @@ if node[:general][:tool][:rogue][:enable]
 
     node[:general][:tool][:rogue][:dependencies].each do |pkg|
         package "#{pkg}" do
+            sensitive true
             action :install
         end
     end
@@ -134,6 +118,7 @@ if node[:general][:tool][:aircrack][:enable]
 
     node[:general][:tool][:aircrack][:dependencies].each do |pkg|
         package "#{pkg}" do
+            sensitive true
             action :install
         end
     end
@@ -158,6 +143,7 @@ if node[:general][:tool][:hcxtools][:enable]
 
     node[:general][:tool][:hcxtools][:dependencies].each do |pkg|
         package "#{pkg}" do
+            sensitive true
             action :install
         end
     end
@@ -182,6 +168,7 @@ if node[:general][:tool][:hcxdumptool][:enable]
 
     node[:general][:tool][:hcxdumptool][:dependencies].each do |pkg|
         package "#{pkg}" do
+            sensitive true
             action :install
         end
     end
@@ -198,6 +185,7 @@ end
 if node[:general][:tool][:scapy][:enable]
     node[:general][:tool][:scapy][:dependencies].each do |pkg|
         package "#{pkg}" do
+            sensitive true
             action :install
         end
     end
