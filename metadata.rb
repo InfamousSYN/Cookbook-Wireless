@@ -4,7 +4,7 @@ maintainer_email 'ainfamoussyn@gmail.com'
 license 'All Rights Reserved'
 description 'Installs/Configures Cookbook-Wireless'
 long_description 'Installs/Configures Cookbook-Wireless'
-version '1.0.3'
+version '2.0.0'
 chef_version '>= 13.0'
 
 # The `issues_url` points to the location where issues for this cookbook are

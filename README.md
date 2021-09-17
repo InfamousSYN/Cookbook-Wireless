@@ -18,7 +18,27 @@ The example Vagrantfile has an override json command to configure the `["general
     chef.json = {
       "general" => {
         "chipset" => {
-          "driver" => "8814au"
+          "driver" => "apt"
+        },
+        "tool" => {
+          "eapeak" => {
+            "enable" => false
+          },
+          "rogue" => {
+            "enable" => true
+          },
+          "aircrack" => {
+            "enable" => false
+          },
+          "hcxtools" => {
+            "enable" => false
+          },
+          "hcxdumptool" => {
+            "enable" => false
+          },
+          "scapy" => {
+            "enable" => false
+          }
         }
       }
     }
