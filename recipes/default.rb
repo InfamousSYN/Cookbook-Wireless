@@ -79,6 +79,15 @@ if node[:general][:chipset][:enable]
     end
 end
 
+## Install Desktop Environment
+if node[:general][:gui][:enable]
+    node[:general][:gui][:desktop].each do |pkg|
+        package "#{pkg}" do
+            action :install
+        end
+    end
+end
+
 ## Install rogue toolkit
 if node[:general][:tool][:rogue][:enable]
     execute "[*] Downloading rogue toolkit" do

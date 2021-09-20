@@ -15,6 +15,10 @@ default[:general][:kali][:keyring][:location] = "https://archive.kali.org/archiv
 default[:general][:kali][:keyring][:filename] = "archive-key.asc"
 default[:general][:applications] = ["git", "wireshark", "python3", "python3-pip","wireless-tools"]
 
+## GUI
+default[:general][:gui][:enable] = true
+default[:general][:gui][:desktop] = ["kali-desktop-kde"]
+
 ## Adaptor Chipset Attributes
 default[:general][:chipset][:enable] = true
 default[:general][:chipset][:driver] = "apt"
